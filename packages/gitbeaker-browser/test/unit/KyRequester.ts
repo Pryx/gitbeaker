@@ -25,7 +25,7 @@ describe('processBody', () => {
           return 'application/json';
         },
       },
-    });
+    } as unknown as Response);
 
     expect(output).toMatchObject({ test: 5 });
   });
@@ -33,7 +33,7 @@ describe('processBody', () => {
   it('should return a buffer if type is octet-stream, binary, or gzip', async () => {
     const output = [
       processBody({
-        blob() {
+        arrayBuffer() {
           return Promise.resolve('test');
         },
         headers: {
@@ -41,9 +41,9 @@ describe('processBody', () => {
             return 'application/octet-stream';
           },
         },
-      }),
+      } as unknown as Response),
       processBody({
-        blob() {
+        arrayBuffer() {
           return Promise.resolve('test');
         },
         headers: {
@@ -51,9 +51,9 @@ describe('processBody', () => {
             return 'binary/octet-stream';
           },
         },
-      }),
+      } as unknown as Response),
       processBody({
-        blob() {
+        arrayBuffer() {
           return Promise.resolve('test');
         },
         headers: {
@@ -61,7 +61,7 @@ describe('processBody', () => {
             return 'application/gzip';
           },
         },
-      }),
+      } as unknown as Response),
     ];
 
     const fulfilled = await Promise.all(output);
@@ -79,7 +79,7 @@ describe('processBody', () => {
           return 'fake';
         },
       },
-    });
+    } as unknown as Response);
 
     expect(output).toBe('6');
   });
@@ -94,7 +94,7 @@ describe('processBody', () => {
           return 'fake';
         },
       },
-    });
+    } as unknown as Response);
 
     expect(output).toBe('');
   });
