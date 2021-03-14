@@ -16,6 +16,7 @@ export default [
       exports: 'named',
       globals: { 'form-data': 'FormData' },
       external: ['form-data'],
+      sourcemap: true,
     },
     plugins: [
       globals(),

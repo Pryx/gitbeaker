@@ -21,15 +21,13 @@
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.34",
     "jest-playwright-preset": "^1.5.1",
-    "jest-puppeteer": "^4.4.0",
     "node-fetch": "^2.6.1",
     "playwright": "^1.9.2",
     "rollup": "^2.41.2",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "ts-node": "^9.1.1",
+    "tslib": "^2.1.0",
     "typescript": "^4.2.3"
   },
   "engines": {

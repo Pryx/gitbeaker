@@ -1,7 +1,6 @@
-import ts from 'rollup-plugin-typescript2';
-import typescript from 'typescript';
+import typescript from '@rollup/plugin-typescript';
 
-export const commonPlugins = [ts({ typescript, useTsconfigDeclarationDir: true })];
+export const commonPlugins = [typescript()];
 export const commonConfig = {
   input: 'src/index.ts',
 };
