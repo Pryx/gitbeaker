@@ -22,9 +22,9 @@ export default [
       globals(),
       builtins(),
       resolve({ browser: true }),
-      commonjs(),
       ...commonPlugins,
-      terser(),
+      commonjs(),
+      terser({ mangle: false }),
     ],
   },
 ];

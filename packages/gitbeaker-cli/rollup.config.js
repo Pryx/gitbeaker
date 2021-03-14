@@ -9,6 +9,7 @@ export default {
   output: {
     file: pkg.bin.gitbeaker,
     format: 'cjs',
+    sourcemap: true
   },
   plugins: [...commonPlugins, json(), preserveShebangs()],
 };

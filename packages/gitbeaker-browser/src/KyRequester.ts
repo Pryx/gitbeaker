@@ -12,6 +12,7 @@ import {
 function responseHeadersAsObject(headers: Headers) {
   return Array.from(headers.entries()).reduce((acc, curr) => {
     acc[curr[0]] = curr[1];
+
     return acc;
   }, {});
 }
@@ -49,8 +50,6 @@ export async function processBody(response: Response) {
     case 'application/octet-stream':
     case 'binary/octet-stream':
     case 'application/gzip': {
-      console.log(response)
-      
       return response.arrayBuffer().then(Buffer.from);
     }
     default: {

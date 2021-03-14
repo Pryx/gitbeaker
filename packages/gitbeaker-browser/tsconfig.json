@@ -6,7 +6,6 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "outDir": "./dist",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "declaration": true,
     "declarationDir": "dist/types"
   },
