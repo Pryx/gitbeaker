@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { chromium, Browser, Page } from "playwright";
 
+const { TEST_ID } = process.env;
 let browser: Browser;
 let page: Page;
 
@@ -34,7 +35,6 @@ describe('Browser Import', () => {
       return gl;
     });
     /* eslint-enable */
-    
     expect(Object.keys(importObject)).toIncludeAllMembers([
       'Groups',
       'GroupAccessRequests',
@@ -132,5 +132,26 @@ describe('Browser Import', () => {
       'Version',
       'Wikis',
     ]);
+  });
+});
+
+describe('Projects API', () => {
+  it('should create a project', async () => {
+    await page.goto(`file://${path.resolve(__dirname, 'assets', 'test-import.html')}`);
+
+    /* eslint-disable */
+    const project = await page.evaluate(() => {
+      // @ts-ignore
+      const { Projects } = gitbeaker;
+      const service = new Projects({
+        host: process.env.GITLAB_URL,
+        token: process.env.PERSONAL_ACCESS_TOKEN,
+      });
+
+      return service.create({ name: `Project Creation Integration Test ${TEST_ID}` });
+    });
+
+    expect(project).toBeInstanceOf(Object);
+    expect(project.name).toEqual(`Project Creation Integration Test ${TEST_ID}`);
   });
 });
