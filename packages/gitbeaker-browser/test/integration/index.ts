@@ -14,8 +14,8 @@ describe('Browser Import', () => {
       return gl;
     });
     /* eslint-enable */
-
-    expect(JSON.parse(importObject)).toIncludeAllMembers([
+    
+    expect(Object.keys(importObject)).toIncludeAllMembers([
       'Groups',
       'GroupAccessRequests',
       'GroupBadges',
