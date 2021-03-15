@@ -140,16 +140,19 @@ describe('Projects API', () => {
     await page.goto(`file://${path.resolve(__dirname, 'assets', 'test-import.html')}`);
 
     /* eslint-disable */
-    const project = await page.evaluate(() => {
-      // @ts-ignore
-      const { Projects } = gitbeaker;
-      const service = new Projects({
-        host: process.env.GITLAB_URL,
-        token: process.env.PERSONAL_ACCESS_TOKEN,
-      });
+    const project = await page.evaluate(
+      ([host, token]) => {
+        // @ts-ignore
+        const { Projects } = gitbeaker;
+        const service = new Projects({
+          host,
+          token,
+        });
 
-      return service.create({ name: `Project Creation Integration Test ${TEST_ID}` });
-    });
+        return service.create({ name: `Project Creation Integration Test ${TEST_ID}` });
+      },
+      [process.env.GITLAB_URL, process.env.PERSONAL_ACCESS_TOKEN],
+    );
 
     expect(project).toBeInstanceOf(Object);
     expect(project.name).toEqual(`Project Creation Integration Test ${TEST_ID}`);
