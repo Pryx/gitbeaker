@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { chromium, Browser, Page } from "playwright";
+import { chromium, Browser, Page } from 'playwright';
 
 const { TEST_ID } = process.env;
 let browser: Browser;
