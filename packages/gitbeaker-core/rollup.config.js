@@ -1,9 +1,9 @@
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
-import { commonConfig, commonPlugins } from '../../rollup.config';
 
 export default {
-  ...commonConfig,
+  input: 'src/index.ts',
   external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   output: [
     {
@@ -21,6 +21,8 @@ export default {
     replace({
       __apiMap__: JSON.stringify(require('./dist/map.json'))
     }),
-    ...commonPlugins,
+    typescript({
+      tsconfig: './tsconfig.json'
+    }),
   ]
 };

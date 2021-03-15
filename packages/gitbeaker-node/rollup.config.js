@@ -1,8 +1,8 @@
+import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
-import { commonConfig, commonPlugins } from '../../rollup.config';
 
 export default {
-  ...commonConfig,
+  input: 'src/index.ts',
   external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   output: [
     {
@@ -16,5 +16,9 @@ export default {
       sourcemap: true
     },
   ],
-  plugins: commonPlugins,
+  plugins: [
+    typescript({
+      tsconfig: './tsconfig.json'
+    })
+  ]
 };
