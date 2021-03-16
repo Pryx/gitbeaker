@@ -108,8 +108,7 @@ test:unit:utils:
       - runner_logs
 
 test:integration:browser:
-  image: mcr.microsoft.com/playwright:bionic
-  stage: test
+  <<: *integration
   script: yarn workspace @gitbeaker/browser test:integration
 
 test:integration:node:
