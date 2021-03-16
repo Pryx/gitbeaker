@@ -77,9 +77,6 @@ test:unit:utils:
 
 #Integration Tests
 .test:integration: &integration
-  image:
-    name: jdalrymple/docker-compose-with-node
-    entrypoint: ['/bin/sh', '-c']
   variables:
     DOCKER_HOST: tcp://docker:2375
     GITLAB_URL: http://docker:8080
@@ -109,10 +106,16 @@ test:unit:utils:
 
 test:integration:browser:
   <<: *integration
+  image:
+    name: jdalrymple/playwright-with-docker-compose
+    entrypoint: ['/bin/sh', '-c']
   script: yarn workspace @gitbeaker/browser test:integration
 
 test:integration:node:
   <<: *integration
+  image:
+    name: jdalrymple/docker-compose-with-node
+    entrypoint: ['/bin/sh', '-c']
   script:
     - yarn workspace @gitbeaker/node test:integration && yarn codecov -F node
     - yarn workspace @gitbeaker/node test:integration --moduleNameMapper='{"src":"<rootDir>/dist/index.js"}'
