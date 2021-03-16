@@ -141,7 +141,7 @@ describe('Projects API', () => {
 
     /* eslint-disable */
     const project = await page.evaluate(
-      ([host, token]) => {
+      ([host, token, id]) => {
         // @ts-ignore
         const { Projects } = gitbeaker;
         const service = new Projects({
@@ -149,9 +149,9 @@ describe('Projects API', () => {
           token,
         });
 
-        return service.create({ name: `Project Creation Integration Test ${TEST_ID}` });
+        return service.create({ name: `Project Creation Integration Test ${id}` });
       },
-      [process.env.GITLAB_URL, process.env.PERSONAL_ACCESS_TOKEN],
+      [process.env.GITLAB_URL, process.env.PERSONAL_ACCESS_TOKEN, TEST_ID],
     );
 
     expect(project).toBeInstanceOf(Object);

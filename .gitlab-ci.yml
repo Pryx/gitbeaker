@@ -56,24 +56,24 @@ lint:docs:
 # Unit Tests
 test:unit:cli:
   stage: test
-  script: yarn jest cli/test/unit  && yarn codecov -F cli
+  script: yarn workspace @gitbeaker/cli test:unit  && yarn codecov -F cli
 
 test:unit:core:
   stage: test
-  script: yarn jest core/test/unit && yarn codecov -F core
+  script: yarn workspace @gitbeaker/core test:unit && yarn codecov -F core
 
 test:unit:node:
   stage: test
-  script: yarn jest node/test/unit && yarn codecov -F node
+  script: yarn workspace @gitbeaker/node test:unit && yarn codecov -F node
 
 test:unit:browser:
   image: mcr.microsoft.com/playwright:bionic
   stage: test
-  script: yarn jest browser/test/unit && yarn codecov -F browser
+  script: yarn workspace @gitbeaker/browser test:unit && yarn codecov -F browser
 
 test:unit:utils:
   stage: test
-  script: yarn jest utils/test/unit && yarn codecov -F utils
+  script: yarn workspace @gitbeaker/requester-utils test:unit && yarn codecov -F utils
 
 #Integration Tests
 .test:integration: &integration
@@ -110,13 +110,13 @@ test:unit:utils:
 test:integration:browser:
   image: mcr.microsoft.com/playwright:bionic
   stage: test
-  script: yarn jest browser/test/integration
+  script: yarn workspace @gitbeaker/browser test:integration
 
 test:integration:node:
   <<: *integration
   script:
-    - yarn test:integration:node && yarn codecov -F node
-    - yarn test:integration:node --moduleNameMapper='{"src":"<rootDir>/dist/index.js"}'
+    - yarn workspace @gitbeaker/node test:integration && yarn codecov -F node
+    - yarn workspace @gitbeaker/node test:integration --moduleNameMapper='{"src":"<rootDir>/dist/index.js"}'
     # - yarn test:integration:node --moduleNameMapper='{"src":"<rootDir>/dist/index.es.js"}' Requires module identifier
 
 # Canary
