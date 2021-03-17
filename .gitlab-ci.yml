@@ -104,22 +104,16 @@ test:unit:utils:
     paths:
       - runner_logs
 
-test:integration:browser:
+test:integration:
   <<: *integration
   image:
     name: jdalrymple/playwright-with-docker-compose
     entrypoint: ['/bin/sh', '-c']
-  script: yarn workspace @gitbeaker/browser test:integration
-
-test:integration:node:
-  <<: *integration
-  image:
-    name: jdalrymple/docker-compose-with-node
-    entrypoint: ['/bin/sh', '-c']
   script:
     - yarn workspace @gitbeaker/node test:integration && yarn codecov -F node
     - yarn workspace @gitbeaker/node test:integration --moduleNameMapper='{"src":"<rootDir>/dist/index.js"}'
-    # - yarn test:integration:node --moduleNameMapper='{"src":"<rootDir>/dist/index.es.js"}' Requires module identifier
+    - yarn workspace @gitbeaker/browser test:integration
+    # - yarn workspace @gitbeaker/node test:integration --moduleNameMapper='{"src":"<rootDir>/dist/index.es.js"}' Requires module identifier
 
 # Canary
 canary:
