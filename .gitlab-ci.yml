@@ -76,58 +76,51 @@ stages:
 test:integration:
   stage: test
   image:
-    name: radial/busyboxplus:curl
+    name: node:lts-alpine
   variables:
-    PERSONAL_ACCESS_TOKEN: ''
     GITLAB_OMNIBUS_CONFIG: |
       gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0', '172.17.0.1'];
     GITLAB_ROOT_PASSWORD: 'password'
     GITLAB_URL: http://gitlab:80
+    GITLAB_PERSONAL_ACCESS_TOKEN: 'kickrox'
   services:
     - name: gitlab/gitlab-ce:latest
       alias: gitlab
   script:
-    - curl $GITLAB_URL
-#
-# .test:integration: &integration
-#   image:
-#     name: jdalrymple/docker-compose-with-node
-#     entrypoint: ['/bin/sh', '-c']
-#   variables:
-#     DOCKER_HOST: tcp://docker:2375
-#     GITLAB_URL: http://docker:8080
-#   services:
-#     - docker:dind
-#   stage: test
-#   retry: 2
-#   before_script:
-#     # Spin up container
-#     - cd scripts
-#     - docker-compose -f docker-compose.yml up -d
-#
-#     # Verify Gitlab instance is up and running
-#     - node probe.js
-#
-#     # Get the personal token
-#     - export PERSONAL_ACCESS_TOKEN=$(docker exec -i gitlab sh -c 'gitlab-rails r /mnt/init.rb')
-#
-#     - cd ..
-#   after_script:
-#     - docker cp gitlab:/var/log/gitlab runner_logs
-#     - echo $(docker exec -i gitlab sh -c "grep -v -e '^#' -e '^$' /etc/gitlab/gitlab.rb") > runner_logs/gitlab.rb
-#   artifacts:
-#     when: on_failure
-#     paths:
-#       - runner_logs
+    - apk add jq curl
+    - echo "Waiting for service to start"
+    - sleep 180
+    - |
+      while [[ "$(curl --fail --silent -X GET "$GITLAB_URL/-/readiness?all=1" --insecure | jq -r '.master_check[0].status')" != "ok" ]];
+      do echo "Polling service - not alive yet";
+      sleep 10;
+      done;
+    - echo "Service is up and running!"
 
-# test:integration:browser:
-#   image: buildkite/puppeteer
-#   stage: test
-#   script: yarn jest browser/test/integration
+  # script:
+  #   - apk add jq curl
 
-# test:integration:node:
-#   <<: *integration
+# test:integration:
+  # stage: test
+#   image: mcr.microsoft.com/playwright:bionic
+  # variables:
+  #   GITLAB_OMNIBUS_CONFIG: |
+  #     gitlab_rails['monitoring_whitelist'] = ['0.0.0.0/0', '172.17.0.1'];
+  #   GITLAB_ROOT_PASSWORD: 'password'
+  #   GITLAB_URL: http://gitlab:80
+  #   GITLAB_PERSONAL_ACCESS_TOKEN: 'kickrox'
+  # services:
+  #   - name: gitlab/gitlab-ce:latest
+  #     alias: gitlab
+  # before_script:
+  #   - apt-get install jq curl
+  #   - |
+  #     while [ $(curl -X GET "http://$GITLAB_URL/-/readiness?all=1" --insecure | jq .master_check[0].status) == 'ok' ];
+  #     do echo "Service not alive yet";
+  #     sleep 5;
+  #     done;
 #   script:
+  # - yarn jest browser/test/integration
 #     - yarn test:integration:node && yarn codecov -F node
 #     - yarn test:integration:node --moduleNameMapper='{"src":"<rootDir>/dist/index.js"}'
 #     # - yarn test:integration:node --moduleNameMapper='{"src":"<rootDir>/dist/index.es.js"}' Requires module identifier
